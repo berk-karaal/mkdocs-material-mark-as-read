@@ -1,0 +1,1 @@
+# Mark as Read Plugin for Mkdocs Material
