@@ -1,33 +1,48 @@
-async function updateNavLinkTitles() {
-  // Get "pages updated at" data provided by this plugin
-  let pagesUpdatedAt = {};
-  await fetch('/mark-as-read/pages-updated-at.json')
-    .then((response) => response.json())
-    .catch((error) => console.error('(mark-as-read plugin) Error:', error))
-    .then((json) => {
-      for (let path in json)
-        pagesUpdatedAt[path] = new Date(json[path]);
-    })
-    .catch((error) => console.error('(mark-as-read plugin) Error:', error));
+class MarkAsReadNavLinkUpdater {
+  constructor() {
+    this.pagesUpdatedAt = {};
 
-  if (Object.keys(pagesUpdatedAt).length === 0)
-    return;
+    this.readMarkIcon = document.getElementById("mark-as-read-read-mark");
+    this.updatedMarkIcon = document.getElementById("mark-as-read-updated-mark");
+  }
 
-  let readMarkIcon = document.getElementById("mark-as-read-read-mark");
-  let updatedMarkIcon = document.getElementById("mark-as-read-updated-mark");
+  /**
+   * Fetch pages-updated-at.json and update `this.pagesUpdatedAt`
+   */
+  async readPagesUpdatedAtData() {
+    await fetch("/mark-as-read/pages-updated-at.json")
+      .then((response) => response.json())
+      .catch((error) => console.error("(mark-as-read plugin) Error:", error))
+      .then((json) => {
+        for (let path in json) this.pagesUpdatedAt[path] = new Date(json[path]);
+      })
+      .catch((error) => console.error("(mark-as-read plugin) Error:", error));
+  }
 
-  // Get all nav links and add appropriate mark to them
-  document.querySelectorAll('.md-nav__link').forEach(function (navLink) {
-    if (typeof navLink.href !== "string")
-      return;
-
-    let navLinkPath = navLink.href.replace(`${window.location.origin}`, "");
+  /**
+   * Return just path from input href string.
+   * @param {String} hrefString element.href
+   * @returns {String}  example: "/path/to/page/"
+   */
+  static cleanHrefToPath(hrefString) {
+    let navLinkPath = hrefString.replace(`${window.location.origin}`, "");
     if (navLinkPath.indexOf("?") !== -1) {
       navLinkPath = navLinkPath.split("?")[0];
     }
     if (navLinkPath.indexOf("#") !== -1) {
       navLinkPath = navLinkPath.split("#")[0];
     }
+    return navLinkPath;
+  }
+
+  /**
+   * Add appropriate icon to single nav link if it was read.
+   * @param {Element} navLink
+   */
+  updateSingleNavLink(navLink) {
+    if (typeof navLink.href !== "string") return;
+
+    let navLinkPath = MarkAsReadNavLinkUpdater.cleanHrefToPath(navLink.href);
     // current navLinkPath example: "/path/to/page/"
 
     let storage_key = `read-${navLinkPath}`;
@@ -37,19 +52,32 @@ async function updateNavLinkTitles() {
       return;
 
     let mark = null;
-    if (new Date(read_at) < pagesUpdatedAt[navLinkPath]) {
-      mark = updatedMarkIcon.cloneNode(true);
+    if (new Date(read_at) < this.pagesUpdatedAt[navLinkPath]) {
+      mark = this.updatedMarkIcon.cloneNode(true);
     } else {
-      mark = readMarkIcon.cloneNode(true);
+      mark = this.readMarkIcon.cloneNode(true);
     }
     mark.style.height = `${navLink.offsetHeight}px`;
     mark.style.marginLeft = "auto";
     mark.classList.remove("mark-as-read-display-none");
     navLink.appendChild(mark);
+  }
 
-  });
+  /** Query all .md-nav__link elements and update their text with read icon if needed. */
+  updateAllNavLinks() {
+    document.querySelectorAll(".md-nav__link").forEach((navLink) => {
+      this.updateSingleNavLink(navLink);
+    });
+  }
+}
+
+var markAsReadNavUpdater = new MarkAsReadNavLinkUpdater();
+
+async function updateNavLinksReadMark() {
+  await markAsReadNavUpdater.readPagesUpdatedAtData();
+  markAsReadNavUpdater.updateAllNavLinks();
 }
 
 document$.subscribe(function () {
-  updateNavLinkTitles();
+  updateNavLinksReadMark();
 });
