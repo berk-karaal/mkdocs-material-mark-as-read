@@ -26,6 +26,7 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
     def on_config(self, config: MkDocsConfig) -> Union[MkDocsConfig, None]:
         # add navlink-updater.js to every page
         config["extra_javascript"].append("js/navlink-updater.js")
+        config["extra_css"].append("css/navlink-updater.css")
 
         return config
 
@@ -55,6 +56,12 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
                     "This page will not be marked as read in navigation sections."
                 )
 
+        # import icons to page
+        markdown += (
+            f"\n\n:{self.config['read_mark']}:{{.mark-as-read-display-none #mark-as-read-read-mark title='Read'}}"
+            f"\n:{self.config['updated_mark']}:{{.mark-as-read-display-none #mark-as-read-updated-mark title='Read but updated'}}"
+        )
+
         return markdown
 
     def on_post_build(self, *, config: MkDocsConfig) -> None:
@@ -63,6 +70,7 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
             "js/mark-as-read-button.js",
             "css/mark-as-read-button.css",
             "js/navlink-updater.js",
+            "css/navlink-updater.css",
         ]
         for file in files:
             dest_file_path = os.path.join(config["site_dir"], file)

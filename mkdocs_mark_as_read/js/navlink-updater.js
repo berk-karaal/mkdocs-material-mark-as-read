@@ -13,6 +13,9 @@ async function updateNavLinkTitles() {
   if (Object.keys(pagesUpdatedAt).length === 0)
     return;
 
+  let readMarkIcon = document.getElementById("mark-as-read-read-mark");
+  let updatedMarkIcon = document.getElementById("mark-as-read-updated-mark");
+
   // Get all nav links and add appropriate mark to them
   document.querySelectorAll('.md-nav__link').forEach(function (navLink) {
     if (typeof navLink.href !== "string")
@@ -33,11 +36,17 @@ async function updateNavLinkTitles() {
       // This page was not read yet
       return;
 
+    let mark = null;
     if (new Date(read_at) < pagesUpdatedAt[navLinkPath]) {
-      navLink.appendChild(document.createTextNode(" (read but updated)"));
+      mark = updatedMarkIcon.cloneNode(true);
     } else {
-      navLink.appendChild(document.createTextNode(" (read)"));
+      mark = readMarkIcon.cloneNode(true);
     }
+    mark.style.height = `${navLink.offsetHeight}px`;
+    mark.style.marginLeft = "auto";
+    mark.classList.remove("mark-as-read-display-none");
+    navLink.appendChild(mark);
+
   });
 }
 
