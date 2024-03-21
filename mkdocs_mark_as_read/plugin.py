@@ -58,8 +58,8 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
 
         # import icons to page
         markdown += (
-            f"\n\n:{self.config['read_mark']}:{{.mark-as-read-display-none #mark-as-read-read-mark title='Read'}}"
-            f"\n:{self.config['updated_mark']}:{{.mark-as-read-display-none #mark-as-read-updated-mark title='Read but updated'}}"
+            f"\n\n:{self.config['read_mark']}:{{.mark-as-read-display-none .mark-as-read-icon #mark-as-read-read-mark title='Read'}}"
+            f"\n:{self.config['updated_mark']}:{{.mark-as-read-display-none .mark-as-read-icon #mark-as-read-updated-mark title='Read but updated'}}"
         )
 
         return markdown

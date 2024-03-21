@@ -47,9 +47,13 @@ class MarkAsReadNavLinkUpdater {
 
     let storage_key = `read-${navLinkPath}`;
     let read_at = window.localStorage.getItem(storage_key);
-    if (read_at === null)
-      // This page was not read yet
+    if (read_at === null) {
+      // Page is not read
+      navLink
+        .querySelectorAll(".mark-as-read-icon")
+        .forEach((oldMark) => oldMark.remove());
       return;
+    }
 
     let mark = null;
     if (new Date(read_at) < this.pagesUpdatedAt[navLinkPath]) {
@@ -68,6 +72,16 @@ class MarkAsReadNavLinkUpdater {
     document.querySelectorAll(".md-nav__link").forEach((navLink) => {
       this.updateSingleNavLink(navLink);
     });
+  }
+
+  /**
+   * Find and update nav link related to given path.
+   * @param {String} path (example: "/path/to/page/")
+   */
+  updateRelatedNavLink(path) {
+    document
+      .querySelectorAll(`a[href="${window.location.origin}${path}"]`)
+      .forEach((navLink) => this.updateSingleNavLink(navLink));
   }
 }
 

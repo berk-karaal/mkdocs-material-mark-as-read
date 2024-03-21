@@ -16,6 +16,8 @@ function markAsReadButtonOnClick() {
     window.localStorage.removeItem(storage_key);
     button.innerHTML = 'Mark as read';
   }
+
+  markAsReadNavUpdater.updateRelatedNavLink(window.location.pathname);
 }
 
 function initButtonText() {
