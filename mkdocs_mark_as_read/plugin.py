@@ -23,6 +23,12 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
         self.pages_updated_at: Dict[str, str] = {}
         # example: {"/page/path/": "2024-03-21", "/another/page/path/": "2024-01-01T12:00:00Z"}
 
+    def on_config(self, config: MkDocsConfig) -> Union[MkDocsConfig, None]:
+        # add navlink-updater.js to every page
+        config["extra_javascript"].append("js/navlink-updater.js")
+
+        return config
+
     def on_page_markdown(
         self, markdown: str, *, page: Page, config: MkDocsConfig, files: Files
     ) -> Union[str, None]:
@@ -56,6 +62,7 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
         files = [
             "js/mark-as-read-button.js",
             "css/mark-as-read-button.css",
+            "js/navlink-updater.js",
         ]
         for file in files:
             dest_file_path = os.path.join(config["site_dir"], file)
