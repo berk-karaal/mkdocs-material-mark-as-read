@@ -1,4 +1,5 @@
 function markAsReadGetStorageKey() {
+  // Storage keys is formatted as "read-/path/to/page/"
   return `read-${window.location.pathname}`;
 }
 
