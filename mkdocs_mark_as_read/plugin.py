@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from datetime import date, datetime
 from typing import Any, Dict, Union
 
@@ -35,11 +36,15 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
     ) -> Union[str, None]:
         """`page.meta` is available at this point."""
 
-        # Store the update date of the page if it uses or should use mark_as_read
-        if isinstance(page.abs_url, str):
-            page_updated_at = self.get_page_updated_at_from_meta(page)
-            if page_updated_at is not None:
-                self.pages_updated_at[page.abs_url] = page_updated_at
+        updated_at = self.get_page_updated_at(page)
+        if updated_at is not None:
+            self.pages_updated_at[page.abs_url] = updated_at  # type: ignore
+
+            # Make sure plugin meta is included to page. Existance of this meta makes "Mark as read"
+            # button displayed. Pages which use this plugin via 'include' or 'exclude' config
+            # don't have this meta, adding here to show button on these pages as well.
+            if PLUGIN_META_NAME not in page.meta:
+                page.meta[PLUGIN_META_NAME] = []
 
         # import icons to page
         markdown += (
@@ -93,5 +98,36 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
                     f"Page '{page.title}' has no 'updated_at' field under its {PLUGIN_META_NAME} meta. "
                     "This page will not be marked as read in navigation sections."
                 )
+
+        return None
+
+    def get_page_updated_at(self, page: Page) -> Union[str, None]:
+        """Return the update date if the given page contains mark_as_read meta or is included via
+        config, otherwise or if excluded via config return None.
+
+        Update date can be returned as "0" which is also valid date string in JS. This value is
+        returned when page doesn't have an update date in its meta but is included via `include` or
+        not excluded via 'exclude' configs in mkdocs.yml.
+        """
+        if not isinstance(page.abs_url, str):
+            return None
+
+        updated_at = self.get_page_updated_at_from_meta(page)
+        if updated_at is not None:
+            return updated_at
+
+        for include_regex in self.config["include"]:
+            if re.search(f"^{include_regex}$", page.abs_url):
+                return "0"
+
+        for exclude_regex in self.config["exclude"]:
+            if re.search(f"^{exclude_regex}$", page.abs_url):
+                return None
+
+        if self.config["include"]:
+            return None
+
+        if self.config["exclude"]:
+            return "0"
 
         return None
