@@ -42,6 +42,9 @@ class MarkAsReadNavLinkUpdater {
   updateSingleNavLink(navLink) {
     if (typeof navLink.href !== "string") return;
 
+    // Don't touch navlinks under table of contents section
+    if (navLink.href.indexOf("#") !== -1) return;
+
     let navLinkPath = MarkAsReadNavLinkUpdater.cleanHrefToPath(navLink.href);
     // current navLinkPath example: "/path/to/page/"
 
