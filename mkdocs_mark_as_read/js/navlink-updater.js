@@ -55,16 +55,16 @@ class MarkAsReadNavLinkUpdater {
       return;
     }
 
-    let mark = null;
+    let icon = null;
     if (new Date(read_at) < this.pagesUpdatedAt[navLinkPath]) {
-      mark = this.updatedMarkIcon.cloneNode(true);
+      icon = this.updatedMarkIcon.cloneNode(true);
     } else {
-      mark = this.readMarkIcon.cloneNode(true);
+      icon = this.readMarkIcon.cloneNode(true);
     }
-    mark.style.height = `${navLink.firstElementChild.offsetHeight}px`; // first child is the text
-    mark.style.marginLeft = "auto";
-    mark.classList.remove("mark-as-read-display-none");
-    navLink.appendChild(mark);
+    icon.style.height = `${navLink.firstElementChild.offsetHeight}px`; // first child is the text
+    icon.style.marginLeft = "auto";
+    icon.classList.remove("mark-as-read-display-none");
+    navLink.appendChild(icon);
   }
 
   /** Query all .md-nav__link elements and update their text with read icon if needed. */
