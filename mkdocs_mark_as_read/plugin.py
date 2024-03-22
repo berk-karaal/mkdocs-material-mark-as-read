@@ -26,7 +26,7 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
 
     def on_config(self, config: MkDocsConfig) -> Union[MkDocsConfig, None]:
         # add navlink-updater.js to every page
-        config["extra_javascript"].append("js/navlink-updater.js")
+        config["extra_javascript"].append("js/mark-as-read-navlink-updater.js")
         config["extra_css"].append("css/navlink-updater.css")
 
         return config
@@ -59,7 +59,7 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
         files = [
             "js/mark-as-read-button.js",
             "css/mark-as-read-button.css",
-            "js/navlink-updater.js",
+            "js/mark-as-read-navlink-updater.js",
             "css/navlink-updater.css",
         ]
         for file in files:
