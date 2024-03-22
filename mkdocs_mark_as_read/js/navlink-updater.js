@@ -79,9 +79,11 @@ class MarkAsReadNavLinkUpdater {
    * @param {String} path (example: "/path/to/page/")
    */
   updateRelatedNavLink(path) {
-    document
-      .querySelectorAll(`a[href="${window.location.origin}${path}"]`)
-      .forEach((navLink) => this.updateSingleNavLink(navLink));
+    document.querySelectorAll(".md-nav__link").forEach((navLink) => {
+      if (typeof navLink.href !== "string") return;
+      if (MarkAsReadNavLinkUpdater.cleanHrefToPath(navLink.href) == path)
+        this.updateSingleNavLink(navLink);
+    });
   }
 }
 
