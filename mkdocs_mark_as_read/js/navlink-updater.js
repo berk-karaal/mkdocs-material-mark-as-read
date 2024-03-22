@@ -2,8 +2,8 @@ class MarkAsReadNavLinkUpdater {
   constructor() {
     this.pagesUpdatedAt = {};
 
-    this.readMarkIcon = document.getElementById("mark-as-read-read-mark");
-    this.updatedMarkIcon = document.getElementById("mark-as-read-updated-mark");
+    this.readMarkIcon = document.getElementById("mark-as-read-read-icon");
+    this.updatedMarkIcon = document.getElementById("mark-as-read-updated-icon");
   }
 
   /**
