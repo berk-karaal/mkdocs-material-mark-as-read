@@ -48,6 +48,12 @@ class MarkAsReadNavLinkUpdater {
     let navLinkPath = MarkAsReadNavLinkUpdater.cleanHrefToPath(navLink.href);
     // current navLinkPath example: "/path/to/page/"
 
+    // Regardless read_at data for this page exist on user's local storage, if website didn't
+    // publish update_at data for this page, don't add any icon to it. This case is possible when
+    // user marks a page as read but then website owner decides to not use mark as read feature
+    // anymore on that page.
+    if (navLinkPath in this.pagesUpdatedAt === false) return;
+
     let storage_key = `read-${navLinkPath}`;
     let read_at = window.localStorage.getItem(storage_key);
     if (read_at === null) {
