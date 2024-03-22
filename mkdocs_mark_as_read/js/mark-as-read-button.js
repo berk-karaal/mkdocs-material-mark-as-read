@@ -31,17 +31,3 @@ function initButtonText() {
   }
 }
 initButtonText();
-
-/*
-function subscribeToDocument() {
-  document$.subscribe(function () {
-    console.log("Hi from mark-as-read.js")
-  });
-}
-
-// We're subscribing to document$ after window is loaded because we want to make sure that document$
-// variable is initialized before we subscribe to it.
-// If js file should be exist in all pages just add js to config["extra_javascript"] and remove
-// this function logic.
-window.onload = subscribeToDocument;
-*/
