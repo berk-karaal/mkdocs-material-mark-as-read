@@ -61,7 +61,7 @@ class MarkAsReadNavLinkUpdater {
     } else {
       mark = this.readMarkIcon.cloneNode(true);
     }
-    mark.style.height = `${navLink.offsetHeight}px`;
+    mark.style.height = `${navLink.firstElementChild.offsetHeight}px`; // first child is the text
     mark.style.marginLeft = "auto";
     mark.classList.remove("mark-as-read-display-none");
     navLink.appendChild(mark);
