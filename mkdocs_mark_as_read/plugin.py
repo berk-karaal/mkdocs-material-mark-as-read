@@ -35,26 +35,11 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
     ) -> Union[str, None]:
         """`page.meta` is available at this point."""
 
-        # Store update date of page if it uses mark_as_read
-        if PLUGIN_META_NAME in page.meta and page.abs_url:
-            for d in page.meta[PLUGIN_META_NAME]:
-                if "updated_at" not in d:
-                    continue
-
-                page_updated_at: Any = d["updated_at"]
-                if isinstance(page_updated_at, date) or isinstance(page_updated_at, datetime):
-                    self.pages_updated_at[page.abs_url] = page_updated_at.isoformat()
-                else:
-                    log.error(
-                        f"Page '{page.title}' has an invalid 'updated_at' field under its {PLUGIN_META_NAME} meta. "
-                        f"Expected date or datetime, got {type(page_updated_at)}."
-                    )
-                break
-            else:
-                log.warning(
-                    f"Page '{page.title}' has no 'updated_at' field under its {PLUGIN_META_NAME} meta. "
-                    "This page will not be marked as read in navigation sections."
-                )
+        # Store the update date of the page if it uses or should use mark_as_read
+        if isinstance(page.abs_url, str):
+            page_updated_at = self.get_page_updated_at_from_meta(page)
+            if page_updated_at is not None:
+                self.pages_updated_at[page.abs_url] = page_updated_at
 
         # import icons to page
         markdown += (
@@ -84,3 +69,29 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
             json.dumps(self.pages_updated_at).encode(),
             os.path.join(config["site_dir"], "mark-as-read/pages-updated-at.json"),
         )
+
+    def get_page_updated_at_from_meta(self, page: Page) -> Union[str, None]:
+        """Return the update date of the given page if it is declareed under mark_as_read meta,
+        otherwise return None.
+        """
+        if PLUGIN_META_NAME in page.meta and page.abs_url:
+            for d in page.meta[PLUGIN_META_NAME]:
+                if "updated_at" not in d:
+                    continue
+
+                page_updated_at: Any = d["updated_at"]
+                if isinstance(page_updated_at, date) or isinstance(page_updated_at, datetime):
+                    return page_updated_at.isoformat()
+                else:
+                    log.error(
+                        f"Page '{page.title}' has an invalid 'updated_at' field under its {PLUGIN_META_NAME} meta. "
+                        f"Expected date or datetime, got {type(page_updated_at)}."
+                    )
+                break
+            else:
+                log.error(
+                    f"Page '{page.title}' has no 'updated_at' field under its {PLUGIN_META_NAME} meta. "
+                    "This page will not be marked as read in navigation sections."
+                )
+
+        return None
