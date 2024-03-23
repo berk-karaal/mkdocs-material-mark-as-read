@@ -6,13 +6,13 @@ build-backend = "setuptools.build_meta"
 "*" = ["*.js", "*.css"]
 
 [project]
-name = "mkdocs-mark-as-read"
+name = "mkdocs-material-mark-as-read"
 version = "0.0.1"
 dependencies = ["mkdocs"]
 requires-python = ">=3.9"
 
 [project.entry-points."mkdocs.plugins"]
-mark-as-read = "mkdocs_mark_as_read.plugin:MarkAsReadPlugin"
+mark-as-read = "mkdocs_material_mark_as_read.plugin:MarkAsReadPlugin"
 
 [tool.ruff]
 line-length = 100

@@ -11,7 +11,7 @@ from mkdocs.structure.files import Files
 from mkdocs.structure.pages import Page
 from mkdocs.utils import copy_file, write_file
 
-from mkdocs_mark_as_read.config import MarkAsReadConfig
+from mkdocs_material_mark_as_read.config import MarkAsReadConfig
 
 log = get_plugin_logger(__name__)
 
