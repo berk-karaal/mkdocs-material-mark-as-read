@@ -1,3 +1,10 @@
+var markAsReadButtonTexts = {
+  mark_as_read: document.getElementById("mark-as-read-text-mark-as-read")
+    .textContent,
+  mark_as_unread: document.getElementById("mark-as-read-text-mark-as-unread")
+    .textContent,
+};
+
 function markAsReadGetStorageKey() {
   // Storage keys is formatted as "read-/path/to/page/"
   return `read-${window.location.pathname}`;
@@ -10,9 +17,9 @@ function updateMarkAsReadButtonText() {
   let read_at = window.localStorage.getItem(storage_key);
 
   if (read_at === null) {
-    button.innerHTML = "Mark as read";
+    button.innerHTML = markAsReadButtonTexts.mark_as_read;
   } else {
-    button.innerHTML = "Mark as unread";
+    button.innerHTML = markAsReadButtonTexts.mark_as_unread;
   }
 }
 

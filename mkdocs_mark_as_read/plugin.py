@@ -45,12 +45,20 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
             if PLUGIN_META_NAME not in page.meta:
                 page.meta[PLUGIN_META_NAME] = []
 
-        # put icons to page. JS code will get them by their IDs and use when needed.
+        display_none_style = "style='display: none !important;'"
+
+        # put icons and texts to page. JS code will get them by their IDs and use when needed.
         assets = cleandoc(
             f"""
-            :{self.config['read_icon']}:{{.mark-as-read-icon #mark-as-read-read-icon title='Read'}}
-            :{self.config['updated_icon']}:{{.mark-as-read-icon #mark-as-read-updated-icon title='Read but updated'}}
-            {{style="display: none !important;"}}
+            :{self.config['read_icon']}:{{.mark-as-read-icon #mark-as-read-read-icon title='{self.config['texts']['read_tooltip']}'}}
+            :{self.config['updated_icon']}:{{.mark-as-read-icon #mark-as-read-updated-icon title='{self.config['texts']['updated_tooltip']}'}}
+            {{ {display_none_style} }}
+
+            {self.config['texts']['mark_as_read']}
+            {{#mark-as-read-text-mark-as-read {display_none_style} data-search-exclude}}
+
+            {self.config['texts']['mark_as_unread']}
+            {{#mark-as-read-text-mark-as-unread {display_none_style} data-search-exclude}}
             """
         )
         markdown += "\n\n" + assets
