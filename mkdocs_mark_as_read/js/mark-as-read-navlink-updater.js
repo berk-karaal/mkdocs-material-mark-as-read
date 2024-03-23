@@ -72,7 +72,6 @@ class MarkAsReadNavLinkUpdater {
     }
     icon.style.height = `${navLink.firstElementChild.offsetHeight}px`; // first child is the text
     icon.style.marginLeft = "auto";
-    icon.classList.remove("mark-as-read-display-none");
     navLink.appendChild(icon);
   }
 

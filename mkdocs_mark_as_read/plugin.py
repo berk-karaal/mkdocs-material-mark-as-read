@@ -2,6 +2,7 @@ import json
 import os
 import re
 from datetime import date, datetime
+from inspect import cleandoc
 from typing import Any, Dict, Union
 
 from mkdocs.config.defaults import MkDocsConfig
@@ -27,8 +28,6 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
     def on_config(self, config: MkDocsConfig) -> Union[MkDocsConfig, None]:
         # add navlink-updater.js to every page
         config["extra_javascript"].append("js/mark-as-read-navlink-updater.js")
-        config["extra_css"].append("css/mark-as-read-navlink-updater.css")
-
         return config
 
     def on_page_markdown(
@@ -46,11 +45,15 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
             if PLUGIN_META_NAME not in page.meta:
                 page.meta[PLUGIN_META_NAME] = []
 
-        # import icons to page
-        markdown += (
-            f"\n\n:{self.config['read_icon']}:{{.mark-as-read-display-none .mark-as-read-icon #mark-as-read-read-icon title='Read'}}"
-            f"\n:{self.config['updated_icon']}:{{.mark-as-read-display-none .mark-as-read-icon #mark-as-read-updated-icon title='Read but updated'}}"
+        # put icons to page. JS code will get them by their IDs and use when needed.
+        assets = cleandoc(
+            f"""
+            :{self.config['read_icon']}:{{.mark-as-read-icon #mark-as-read-read-icon title='Read'}}
+            :{self.config['updated_icon']}:{{.mark-as-read-icon #mark-as-read-updated-icon title='Read but updated'}}
+            {{style="display: none !important;"}}
+            """
         )
+        markdown += "\n\n" + assets
 
         return markdown
 
@@ -60,7 +63,6 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
             "js/mark-as-read-button.js",
             "css/mark-as-read-button.css",
             "js/mark-as-read-navlink-updater.js",
-            "css/mark-as-read-navlink-updater.css",
         ]
         for file in files:
             dest_file_path = os.path.join(config["site_dir"], file)
