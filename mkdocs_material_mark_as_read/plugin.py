@@ -90,11 +90,8 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
         otherwise return None.
         """
         if PLUGIN_META_NAME in page.meta and page.abs_url:
-            for d in page.meta[PLUGIN_META_NAME]:
-                if "updated_at" not in d:
-                    continue
-
-                page_updated_at: Any = d["updated_at"]
+            if "updated_at" in page.meta[PLUGIN_META_NAME]:
+                page_updated_at: Any = page.meta[PLUGIN_META_NAME]["updated_at"]
                 if isinstance(page_updated_at, date) or isinstance(page_updated_at, datetime):
                     return page_updated_at.isoformat()
                 else:
@@ -102,7 +99,6 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
                         f"Page '{page.title}' has an invalid 'updated_at' field under its {PLUGIN_META_NAME} meta. "
                         f"Expected date or datetime, got {type(page_updated_at)}."
                     )
-                break
             else:
                 log.error(
                     f"Page '{page.title}' has no 'updated_at' field under its {PLUGIN_META_NAME} meta. "
