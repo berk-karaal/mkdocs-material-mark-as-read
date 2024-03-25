@@ -28,6 +28,15 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 ```
 
+!!! info "Set `site_url` config"
+
+    If your website is not hosted on the root of the domain, you must set `site_url` in `mkdocs.yml`.
+    Example for GitHub Pages:
+
+    ```yaml title="mkdocs.yml"
+    site_url: https://username.github.io/repo-name
+    ```
+
 ## 2. Add "Mark as read" Button to Pages
 
 To show a button at the end of the pages you should extend `content.html` template. Follow these
