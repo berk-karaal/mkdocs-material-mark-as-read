@@ -4,13 +4,16 @@ class MarkAsReadNavLinkUpdater {
 
     this.readMarkIcon = document.getElementById("mark-as-read-read-icon");
     this.updatedMarkIcon = document.getElementById("mark-as-read-updated-icon");
+    this.site_url = document.getElementById(
+      "mark-as-read-config-site-url"
+    ).innerText;
   }
 
   /**
    * Fetch pages-updated-at.json and update `this.pagesUpdatedAt`
    */
   async readPagesUpdatedAtData() {
-    await fetch("/mark-as-read/pages-updated-at.json")
+    await fetch(`${this.site_url}/mark-as-read/pages-updated-at.json`)
       .then((response) => response.json())
       .catch((error) => console.error("(mark-as-read plugin) Error:", error))
       .then((json) => {

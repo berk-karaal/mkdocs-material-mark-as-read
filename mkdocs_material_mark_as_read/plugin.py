@@ -59,6 +59,9 @@ class MarkAsReadPlugin(BasePlugin[MarkAsReadConfig]):
 
             {self.config['texts']['mark_as_unread']}
             {{#mark-as-read-text-mark-as-unread {display_none_style} data-search-exclude}}
+
+            {config.site_url}
+            {{#mark-as-read-config-site-url {display_none_style} data-search-exclude}}
             """
         )
         markdown += "\n\n" + assets
