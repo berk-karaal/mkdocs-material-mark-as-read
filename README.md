@@ -7,7 +7,7 @@ This plugin allows users to keep track of their reading progress by marking page
 
 Preview gif:
 
-![Preview gif](docs/mark-as-read-demo.gif)
+![Preview gif](https://raw.githubusercontent.com/berk-karaal/mkdocs-material-mark-as-read/main/docs/mark-as-read-demo.gif)
 
 Try it on [documentation website](https://berk-karaal.github.io/mkdocs-material-mark-as-read/).
 
