@@ -1,0 +1,54 @@
+site_name: Mark as Read
+repo_url: https://github.com/berk-karaal/mkdocs-material-mark-as-read
+edit_uri: edit/main/docs/
+
+nav:
+  - Home: index.md
+  - Quickstart: quickstart/index.md
+  - Config Reference: config-reference/index.md
+  - Customization:
+      - Customizing Button Style: customization/button-style/index.md
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  icon:
+    repo: fontawesome/brands/github
+
+  custom_dir: overrides
+
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - content.code.copy
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mark-as-read
