@@ -45,9 +45,9 @@ steps:
     
     ```jinja title="overrides/partials/mark-as-read-button.html"
     {% if page.meta and "mark_as_read" in page.meta %}
-        <link rel="stylesheet" href="/css/mark-as-read-button.css">
+        <link rel="stylesheet" href="{{config.site_url}}css/mark-as-read-button.css">
         <button class="mark-as-read-button" onclick="markAsReadButtonOnClick()"></button>
-        <script src="/js/mark-as-read-button.js"></script>
+        <script src="{{config.site_url}}js/mark-as-read-button.js"></script>
     {% endif %}
     ```
     
