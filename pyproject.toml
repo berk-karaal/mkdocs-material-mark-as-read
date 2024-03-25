@@ -4,9 +4,19 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mkdocs-material-mark-as-read"
+description = "A mkdocs-material plugin to mark pages as read"
+maintainers = [
+    { name = "Berk Karaal", email = "iletisim.berkkaraal@gmail.com" },
+]
+readme = "README.md"
+license = { text = "MIT License" }
 version = "0.0.1"
 dependencies = ["mkdocs"]
 requires-python = ">=3.9"
+
+[project.urls]
+Documentation = "https://berk-karaal.github.io/mkdocs-material-mark-as-read/"
+Repository = "https://github.com/berk-karaal/mkdocs-material-mark-as-read.git"
 
 [project.entry-points."mkdocs.plugins"]
 mark-as-read = "mkdocs_material_mark_as_read.plugin:MarkAsReadPlugin"
