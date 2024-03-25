@@ -1,5 +1,6 @@
 site_name: Mark as Read
 repo_url: https://github.com/berk-karaal/mkdocs-material-mark-as-read
+site_url: https://berk-karaal.github.io/mkdocs-material-mark-as-read
 edit_uri: edit/main/docs/
 
 nav:
