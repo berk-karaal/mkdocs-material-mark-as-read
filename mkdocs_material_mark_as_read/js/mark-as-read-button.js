@@ -1,8 +1,8 @@
 var markAsReadButtonTexts = {
   mark_as_read: document.getElementById("mark-as-read-text-mark-as-read")
-    .textContent,
+    .innerHTML,
   mark_as_unread: document.getElementById("mark-as-read-text-mark-as-unread")
-    .textContent,
+    .innerHTML,
 };
 
 function markAsReadGetStorageKey() {
